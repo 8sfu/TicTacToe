@@ -14,13 +14,14 @@ public:
   void printBoard();
   bool valid(char input[], bool isx);
   void placePiece(char input[], bool isx);
+  bool checkWin(char current);
 };
 
 int main() {
   cout << endl;
   Board board;
   board.printBoard();
-  char input[3];
+  char input[80];
   int turns = 9;
   bool xturn = true;
   cout << "this is tictactoe. format your inputs like 'a2'. letter is row, and number is column. x goes first." << endl;
@@ -28,11 +29,11 @@ int main() {
     do{
       cout << "enter a valid input" << endl;
       cin >> input;
-      //  cout << input << endl;
+      cout << "input:" << input << endl;
       xturn = !(i%2);
     }while(board.valid(input, xturn) == false); /*keep requesting input until the input is valid*/
-    //cout << input << " is a valid input" << endl;
-    //cout << "xturn is: " << xturn << endl;
+    cout << input << " is a valid input" << endl;
+    cout << "turn: " << i << endl;
   }
   cout << "game over, bye" << endl;
   return 0;
@@ -54,13 +55,20 @@ bool Board::valid(char input[], bool isx){ /*input should be formatted a2, */
   if (strlen(input) == 2){
     if (input[0] == 'a' || input[0] == 'b' || input[0] == 'c'){
       if (input[1] == '1' || input[1] == '2' || input[1] == '3'){
-	//if (board[input[0]-97][input[1]-49] == '_'){
+	cout << "formatcorrect" << endl;
+	if (board[input[0]-97][input[1]-49] == '_'){
+	  cout << "nopiecethere" << endl;
+	  cout << "placing piece at: " << input[0]-97 << "," << input[1]-49 << endl;
 	  placePiece(input, isx);
 	  printBoard();
+	  cout << endl;
 	  return true;
-	  //} else {
-	  //return false;
-	  //}
+	} else {
+	  cout << "piecethere" << endl;
+	  cout << "not placing piece at: " << input[0]-97 << "," << input[1]-49 << endl;
+	  cout << endl;
+	  return false;
+	}
       } else {
 	return false;
       }
@@ -80,4 +88,8 @@ void Board::placePiece(char input[], bool isx){
     board[input[0]-97][input[1]-49] = 'O';
   }
   //cout << "Placed piece at: " << input[0]-97 << "," << input[1]-49 << endl;
+}
+
+bool Board::checkWin(char current){
+
 }
