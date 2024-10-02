@@ -14,7 +14,7 @@ public:
   void printBoard();
   bool valid(char input[], bool isx);
   void placePiece(char input[], bool isx);
-  bool checkWin(char current);
+  bool checkWin(char c);
 };
 
 int main() {
@@ -22,20 +22,32 @@ int main() {
   Board board;
   board.printBoard();
   char input[80];
+  bool xturn;
   int turns = 9;
-  bool xturn = true;
   cout << "this is tictactoe. format your inputs like 'a2'. letter is row, and number is column. x goes first." << endl;
+
   for(int i = 0; i < turns; i++) {
     do{
       cout << "enter a valid input" << endl;
       cin >> input;
       cout << "input:" << input << endl;
       xturn = !(i%2);
-    }while(board.valid(input, xturn) == false); /*keep requesting input until the input is valid*/
+    }while(board.valid(input,xturn) == false); /*keep requesting input until the input is valid*/
     cout << input << " is a valid input" << endl;
-    cout << "turn: " << i << endl;
+    cout << "turn: " << i+1 << endl;
+    if(xturn){
+      if(board.checkWin('X')){
+	cout << "X wins!" << endl;
+	return 0;
+      }
+    } else {
+      if(board.checkWin('O')){
+	cout << "O wins!" << endl;
+	return 0;
+      }
+    }
   }
-  cout << "game over, bye" << endl;
+  cout << "it's a tie, bye" << endl;
   return 0;
 }
 
@@ -90,6 +102,23 @@ void Board::placePiece(char input[], bool isx){
   //cout << "Placed piece at: " << input[0]-97 << "," << input[1]-49 << endl;
 }
 
-bool Board::checkWin(char current){
-
+bool Board::checkWin(char c){
+  if((board[0][0] == c) && (board[0][1] == c) && (board[0][2] == c)){
+    return true;
+  } else if((board[1][0] == c) && (board[1][1] == c) && (board[1][2] == c)){
+    return true;
+  } else if((board[2][0] == c) && (board[2][1] == c) && (board[2][2] == c)){
+    return true;
+  } else if((board[0][0] == c) && (board[1][0] == c) && (board[2][0] == c)){
+    return true;
+  } else if((board[0][1] == c) && (board[1][1] == c) && (board[2][1] == c)){
+    return true;
+  } else if((board[0][2] == c) && (board[1][2] == c) && (board[2][2] == c)){
+    return true;
+  } else if((board[0][0] == c) && (board[1][1] == c) && (board[2][2] == c)){
+    return true;
+  } else if((board[0][2] == c) && (board[1][1] == c) && (board[2][0] == c)){
+    return true;
+  }
+  return false;
 }
