@@ -19,35 +19,59 @@ public:
 
 int main() {
   cout << endl;
-  Board board;
-  board.printBoard();
-  char input[80];
-  bool xturn;
-  int turns = 9;
-  cout << "this is tictactoe. format your inputs like 'a2'. letter is row, and number is column. x goes first." << endl;
+  bool game = true;
+  int xwin = 0;
+  int owin = 0;
+  char replayChar = ' ';
+  while(game){
+    Board board;
+    board.printBoard();
+    char input[80];
+    bool xturn;
+    int turns = 9;
+    cout << "this is tictactoe. format your inputs like 'a2'. letter is row, and numb\
+er is column. x goes first." << endl;
 
-  for(int i = 0; i < turns; i++) {
-    do{
-      cout << "enter a valid input" << endl;
-      cin >> input;
-      cout << "input:" << input << endl;
-      xturn = !(i%2);
-    }while(board.valid(input,xturn) == false); /*keep requesting input until the input is valid*/
-    cout << input << " is a valid input" << endl;
-    cout << "turn: " << i+1 << endl;
-    if(xturn){
-      if(board.checkWin('X')){
-	cout << "X wins!" << endl;
-	return 0;
-      }
-    } else {
-      if(board.checkWin('O')){
-	cout << "O wins!" << endl;
-	return 0;
+    for(int i = 0; i < turns; i++) {
+      do{
+	cout << "enter a valid input" << endl;
+	cin >> input;
+	cout << "input:" << input << endl;
+	xturn = !(i%2);
+      }while(board.valid(input,xturn) == false); /*keep requesting input until the input is valid*/
+      cout << input << " is a valid input" << endl;
+      cout << "turn: " << i+1 << endl;
+      if(xturn){
+	if(board.checkWin('X')){
+	  cout << "X wins!" << endl;
+	  xwin++;
+	  cout << "X wins: " << xwin << endl;
+	  cout << "O wins: " << owin << endl;
+	  goto finished; //sorry for the disjointed nature of the program, without the break, the program attemps to fill every remaining space in the board.
+	}
+      } else {
+	if(board.checkWin('O')){
+	  cout << "O wins!" << endl;
+	  owin++;
+	  cout << "X wins: " << xwin << endl;
+	  cout << "O wins: " << owin << endl;
+	  goto finished;
+	}
       }
     }
+    cout << "tie" << endl;
+    cout << "X wins: " << xwin << endl;
+    cout << "O wins: " << owin << endl;
+    finished:
+    game = false;
+    cout << "press y to keep playing" << endl;
+    cout << endl;
+    cin >> replayChar;
+    if(replayChar == 'y'){
+      game = true;
+    }
   }
-  cout << "it's a tie, bye" << endl;
+  cout << "bye" << endl;
   return 0;
 }
 
@@ -67,22 +91,23 @@ bool Board::valid(char input[], bool isx){ /*input should be formatted a2, */
   if (strlen(input) == 2){
     if (input[0] == 'a' || input[0] == 'b' || input[0] == 'c'){
       if (input[1] == '1' || input[1] == '2' || input[1] == '3'){
-	cout << "formatcorrect" << endl;
-	if (board[input[0]-97][input[1]-49] == '_'){
-	  cout << "nopiecethere" << endl;
-	  cout << "placing piece at: " << input[0]-97 << "," << input[1]-49 << endl;
-	  placePiece(input, isx);
-	  printBoard();
-	  cout << endl;
-	  return true;
-	} else {
-	  cout << "piecethere" << endl;
-	  cout << "not placing piece at: " << input[0]-97 << "," << input[1]-49 << endl;
-	  cout << endl;
-	  return false;
-	}
+        //cout << "formatcorrect" << endl;
+        if (board[input[0]-97][input[1]-49] == '_'){
+          //cout << "nopiecethere" << endl;
+          //cout << "placing piece at: " << input[0]-97 << "," << input[1]-49 << endl;
+          placePiece(input, isx);
+          printBoard();
+          cout << endl;
+          return true;
+        } else {
+          //cout << "piecethere" << endl;
+          //cout << "not placing piece at: " << input[0]-97 << "," << input[1]-49 << \
+endl;
+          //cout << endl;
+          return false;
+        }
       } else {
-	return false;
+        return false;
       }
     } else {
       return false;
@@ -122,3 +147,5 @@ bool Board::checkWin(char c){
   }
   return false;
 }
+
+
